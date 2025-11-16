@@ -1,0 +1,20 @@
+{
+    "name": "glass-pricing/quote-management-system",
+    "description": "报价单管理系统 - 玻璃深加工企业专用",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "ext-pdo": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Developer",
+            "email": "developer@example.com"
+        }
+    ]
+}
