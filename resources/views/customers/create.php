@@ -4,17 +4,17 @@
     <form action="/customers" method="POST" class="space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="code">速记码</label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="code">速记码*</label>
                 <input type="text" id="code" name="code" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
             </div>
 
             <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="short_name">客户简称</label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="short_name">客户简称*</label>
                 <input type="text" id="short_name" name="short_name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
             </div>
 
             <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="full_name">客户全称</label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="full_name">客户全称*</label>
                 <input type="text" id="full_name" name="full_name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
             </div>
 
@@ -29,8 +29,13 @@
             </div>
 
             <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="level">客户级别</label>
-                <input type="text" id="level" name="level" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="level">客户级别*</label>
+                <select id="level" name="level" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <option value="">请选择客户级别</option>
+                    <?php foreach (GRADE as $grade): ?>
+                        <option value="<?= htmlspecialchars($grade) ?>"><?= htmlspecialchars($grade) ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
 
             <div class="md:col-span-2">
@@ -48,8 +53,8 @@
                 <input type="text" id="bank" name="bank" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
-            <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="account_number">账号+行号</label>
+            <div class="md:col-span-2">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="account_number">账号+行号[账号在前，行号在后用+连接]</label>
                 <input type="text" id="account_number" name="account_number" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
         </div>

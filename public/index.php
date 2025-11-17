@@ -26,6 +26,7 @@ $router->post('/install', [new InstallController(), 'install']);
 $router->get('/login', [new AuthController(), 'login']);
 $router->post('/login', [new AuthController(), 'authenticate']);
 $router->post('/logout', [new AuthController(), 'logout']);
+$router->get('/logout', [new AuthController(), 'logout']);
 
 // 检查用户是否已登录
 function isAuthenticated() {
@@ -37,12 +38,12 @@ function hasRole($role) {
     return isset($_SESSION['role']) && $_SESSION['role'] === $role;
 }
 
-// 定义需要登录的路由
+// 定义需要登录保护的路由
 function defineProtectedRoutes($router) {
     // 首页路由
     $router->get('/', function() {
-        $content = "<h1 class='text-3xl font-bold text-center mb-8'>报价单管理系统</h1>";
-        $content .= "<div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>";
+        $content = "<h1 class='text-3xl font-bold text-gray-800 text-center mb-8'>欢迎使用报价单管理系统</h1>";
+        $content .= "<div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>";
         $content .= "<div class='bg-white rounded-lg shadow-md p-6'>";
         $content .= "<h2 class='text-xl font-bold mb-4'>客户管理</h2>";
         $content .= "<p class='mb-4'>管理客户信息和资料</p>";
@@ -101,6 +102,7 @@ function defineProtectedRoutes($router) {
     // 报价单对比路由
     $router->get('/quotes/comparison', [new QuoteComparisonController(), 'index']);
     $router->post('/quotes/comparison', [new QuoteComparisonController(), 'compare']);
+    $router->get('/quotes/comparison/{uriParam}', [new QuoteComparisonController(), 'compareByUri']);
 
     // 产品路由
     $router->get('/products', [new ProductController(), 'index']);
@@ -205,14 +207,42 @@ function defineProtectedRoutes($router) {
 if (isAuthenticated()) {
     defineProtectedRoutes($router);
 } else {
-    // 如果用户未登录，将所有受保护的路由重定向到登录页面
+    // 如果用户未登录，直接重定向到登录页面，不允许游客查看任何内容
     $router->get('/', function() {
         header('Location: /login');
         exit;
     });
     
-    // 重新定义受保护的路由，重定向到登录页面
-    defineProtectedRoutes($router);
+    // 对于所有受保护的路由，也重定向到登录页面
+    $router->get('/customers', function() {
+        header('Location: /login');
+        exit;
+    });
+    
+    $router->get('/quotes', function() {
+        header('Location: /login');
+        exit;
+    });
+    
+    $router->get('/products', function() {
+        header('Location: /login');
+        exit;
+    });
+    
+    $router->get('/users', function() {
+        header('Location: /login');
+        exit;
+    });
+    
+    $router->get('/quotes/comparison', function() {
+        header('Location: /login');
+        exit;
+    });
+    
+    $router->get('/quotes/comparison/{uriParam}', function($uriParam) {
+        header('Location: /login');
+        exit;
+    });
 }
 
 // 解析当前请求

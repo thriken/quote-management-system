@@ -2,7 +2,7 @@
     <h1 class="text-2xl font-bold text-gray-800 mb-6">新增报价单项目 - <?= htmlspecialchars($quote['version']) ?></h1>
 
     <form action="/quotes/<?= $quote['id'] ?>/items" method="POST" class="space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
             <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="product_id">产品</label>
                 <select id="product_id" name="product_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
@@ -16,17 +16,12 @@
             </div>
 
             <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="quantity">数量</label>
-                <input type="number" id="quantity" name="quantity" step="0.01" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-            </div>
-
-            <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="unit_price">单价</label>
                 <input type="number" id="unit_price" name="unit_price" step="0.01" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
             </div>
 
             <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="discount_rate">折扣率 (%)</label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="discount_rate">折扣 (%)[填入1代表优惠1%，价格是99%]</label>
                 <input type="number" id="discount_rate" name="discount_rate" step="0.01" min="0" max="100" value="0" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
         </div>

@@ -20,11 +20,15 @@ class ProductController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
             
+        // 包含常量文件
+        require_once __DIR__ . '/../../config/const.php';
         return $this->render('products/index', ['products' => $products]);
     }
 
     public function create()
     {
+        // 包含常量文件
+        require_once __DIR__ . '/../../config/const.php';
         return $this->render('products/create');
     }
 
@@ -45,6 +49,8 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = $this->product->find($id);
+        // 包含常量文件
+        require_once __DIR__ . '/../../config/const.php';
         return $this->render('products/edit', ['product' => $product]);
     }
 

@@ -31,7 +31,12 @@
 
             <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="level">客户级别</label>
-                <input type="text" id="level" name="level" value="<?= htmlspecialchars($customer['level']) ?>" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <select id="level" name="level" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">请选择客户级别</option>
+                    <?php foreach (GRADE as $grade): ?>
+                        <option value="<?= htmlspecialchars($grade) ?>" <?= $grade == $customer['level'] ? 'selected' : '' ?>><?= htmlspecialchars($grade) ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
 
             <div class="md:col-span-2">

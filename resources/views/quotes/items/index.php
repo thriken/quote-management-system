@@ -11,7 +11,6 @@
             <thead class="bg-gray-200">
                 <tr>
                     <th class="py-2 px-4 text-left">产品名称</th>
-                    <th class="py-2 px-4 text-left">数量</th>
                     <th class="py-2 px-4 text-left">单价</th>
                     <th class="py-2 px-4 text-left">折扣率</th>
                     <th class="py-2 px-4 text-left">小计</th>
@@ -28,7 +27,6 @@
                 ?>
                 <tr class="border-b">
                     <td class="py-2 px-4"><?= $product ? htmlspecialchars($product['name']) : '未知产品' ?></td>
-                    <td class="py-2 px-4"><?= htmlspecialchars($item['quantity']) ?></td>
                     <td class="py-2 px-4">¥<?= number_format($item['unit_price'], 2) ?></td>
                     <td class="py-2 px-4"><?= number_format($item['discount_rate'], 2) ?>%</td>
                     <td class="py-2 px-4">¥<?= number_format($subtotal, 2) ?></td>
@@ -40,7 +38,7 @@
                 </tr>
                 <?php endforeach; ?>
                 <tr class="border-b bg-gray-100 font-bold">
-                    <td class="py-2 px-4" colspan="4">总计</td>
+                    <td class="py-2 px-4" colspan="3">总计</td>
                     <td class="py-2 px-4">¥<?= number_format($total, 2) ?></td>
                     <td class="py-2 px-4"></td>
                 </tr>

@@ -14,8 +14,27 @@ class AuthController extends Controller
         $this->user = new User();
     }
 
+    public function logout()
+    {
+        session_start();
+        unset($_SESSION['user_id']);
+        unset($_SESSION['username']);
+        unset($_SESSION['role']);
+        session_destroy();
+        
+        $this->redirect('/login');
+    }
+    
     public function login()
     {
+        // 检查用户是否已经登录
+        session_start();
+        if (isset($_SESSION['user_id'])) {
+            // 如果已登录，重定向到首页
+            $this->redirect('/');
+            return;
+        }
+        
         return $this->render('auth/login');
     }
 
@@ -35,6 +54,7 @@ class AuthController extends Controller
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
+            $_SESSION['name'] = $user['name'];
 
             // 重定向到首页
             $this->redirect('/');
@@ -44,16 +64,5 @@ class AuthController extends Controller
                 'error' => '用户名或密码错误'
             ]);
         }
-    }
-
-    public function logout()
-    {
-        session_start();
-        unset($_SESSION['user_id']);
-        unset($_SESSION['username']);
-        unset($_SESSION['role']);
-        session_destroy();
-
-        $this->redirect('/login');
     }
 }

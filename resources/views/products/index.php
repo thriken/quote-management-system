@@ -10,22 +10,35 @@
         <table class="min-w-full bg-white">
             <thead class="bg-gray-200">
                 <tr>
+                    <th class="py-2 px-4 text-left">ID</th>
                     <th class="py-2 px-4 text-left">产品名称</th>
                     <th class="py-2 px-4 text-left">原料厂家</th>
-                    <th class="py-2 px-4 text-left">单价</th>
+                    <th class="py-2 px-4 text-left">基准单价</th>
                     <th class="py-2 px-4 text-left">计价单位</th>
                     <th class="py-2 px-4 text-left">产品类型</th>
                     <th class="py-2 px-4 text-left">操作</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($products as $product): ?>
+                <?php 
+                // 包含常量文件
+                require_once __DIR__ . '/../../../config/const.php';
+                
+                // 创建英文到中文产品类型的映射
+                $productTypeMap = [];
+                for ($i = 0; $i < count(PRODUCT_TYPE_EN); $i++) {
+                    $productTypeMap[PRODUCT_TYPE_EN[$i]] = PRODUCT_TYPE_CN[$i];
+                }
+                
+                foreach ($products as $product): 
+                ?>
                 <tr class="border-b">
+                    <td class="py-2 px-4"><?= htmlspecialchars($product['id']) ?></td>
                     <td class="py-2 px-4"><?= htmlspecialchars($product['name']) ?></td>
                     <td class="py-2 px-4"><?= htmlspecialchars($product['manufacturer']) ?></td>
                     <td class="py-2 px-4">¥<?= number_format($product['price'], 2) ?></td>
                     <td class="py-2 px-4"><?= htmlspecialchars($product['unit']) ?></td>
-                    <td class="py-2 px-4"><?= htmlspecialchars($product['type']) ?></td>
+                    <td class="py-2 px-4"><?= htmlspecialchars($productTypeMap[$product['type']] ?? $product['type']) ?></td>
                     <td class="py-2 px-4">
                         <a href="/products/edit/<?= $product['id'] ?>" class="text-blue-600 hover:text-blue-900 mr-5">编辑</a>
                         <a href="/products/delete/<?= $product['id'] ?>" class="text-red-600 hover:text-red-900" 

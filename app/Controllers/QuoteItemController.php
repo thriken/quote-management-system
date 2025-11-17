@@ -57,7 +57,7 @@ class QuoteItemController extends Controller
         $data = [
             'quote_id' => $quoteId,
             'product_id' => $this->post('product_id'),
-            'quantity' => $this->post('quantity'),
+            'quantity' => 1, // 默认数量为1
             'unit_price' => $this->post('unit_price'),
             'discount_rate' => $this->post('discount_rate', 0)
         ];
@@ -83,7 +83,7 @@ class QuoteItemController extends Controller
     {
         $data = [
             'product_id' => $this->post('product_id'),
-            'quantity' => $this->post('quantity'),
+            'quantity' => 1, // 默认数量为1
             'unit_price' => $this->post('unit_price'),
             'discount_rate' => $this->post('discount_rate', 0)
         ];

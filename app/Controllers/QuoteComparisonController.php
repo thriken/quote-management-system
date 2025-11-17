@@ -98,6 +98,69 @@ class QuoteComparisonController extends Controller
         ]);
     }
     
+    /**
+     * 根据URI参数进行报价单对比
+     * URI格式: /quotes/comparison/id1_id2_id3_...
+     */
+    public function compareByUri($uriParam)
+    {
+        // 解析URI参数获取报价单ID
+        $quoteIds = explode('_', $uriParam);
+        
+        // 过滤无效ID并限制最多8个
+        $quoteIds = array_slice(array_filter($quoteIds, function($id) {
+            return is_numeric($id) && $id > 0;
+        }), 0, 8);
+        
+        if (count($quoteIds) < 2) {
+            return $this->render('quotes/comparison/index', [
+                'quotes' => $this->quote->all(),
+                'customers' => $this->getCustomersForQuotes($this->quote->all()),
+                'error' => '请至少选择两个报价单进行对比'
+            ]);
+        }
+        
+        // 获取报价单详情
+        $quotes = [];
+        $items = [];
+        $products = [];
+        
+        foreach ($quoteIds as $quoteId) {
+            $quote = $this->quote->find($quoteId);
+            if ($quote) {
+                $quotes[$quoteId] = $quote;
+                
+                // 获取报价单项目
+                $quoteItems = $this->quoteItem->where('quote_id', $quoteId);
+                $items[$quoteId] = $quoteItems;
+                
+                // 获取产品信息
+                foreach ($quoteItems as $item) {
+                    if (!isset($products[$item['product_id']])) {
+                        $product = $this->product->find($item['product_id']);
+                        $products[$item['product_id']] = $product;
+                    }
+                }
+            }
+        }
+        
+        // 获取客户信息
+        $customers = [];
+        foreach ($quotes as $quote) {
+            if (!isset($customers[$quote['customer_id']])) {
+                $customer = $this->customer->find($quote['customer_id']);
+                $customers[$quote['customer_id']] = $customer;
+            }
+        }
+        
+        return $this->render('quotes/comparison/result', [
+            'quotes' => $quotes,
+            'items' => $items,
+            'products' => $products,
+            'customers' => $customers
+        ]);
+    }
+    
     protected function getCustomersForQuotes($quotes)
     {
         $customers = [];

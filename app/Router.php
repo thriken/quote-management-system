@@ -65,8 +65,8 @@ class Router
 
     protected function convertToRegex($route)
     {
-        // 将 {id} 转换为正则表达式
-        $route = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '([0-9]+)', $route);
+        // 将 {paramName} 转换为正则表达式
+        $route = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '([^/]+)', $route);
         return '#^' . $route . '$#';
     }
 }

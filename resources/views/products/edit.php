@@ -11,7 +11,12 @@
 
             <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="manufacturer">原料厂家</label>
-                <input type="text" id="manufacturer" name="manufacturer" value="<?= htmlspecialchars($product['manufacturer']) ?>" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <select id="manufacturer" name="manufacturer" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">请选择原料厂家</option>
+                    <?php foreach (SUPPLIER as $supplier): ?>
+                        <option value="<?= htmlspecialchars($supplier) ?>" <?= $supplier == $product['manufacturer'] ? 'selected' : '' ?>><?= htmlspecialchars($supplier) ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
 
             <div>
@@ -21,12 +26,22 @@
 
             <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="unit">计价单位</label>
-                <input type="text" id="unit" name="unit" value="<?= htmlspecialchars($product['unit']) ?>" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <select id="unit" name="unit" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <option value="">请选择计价单位</option>
+                    <?php foreach (UNIT as $unit): ?>
+                        <option value="<?= htmlspecialchars($unit) ?>" <?= $unit == $product['unit'] ? 'selected' : '' ?>><?= htmlspecialchars($unit) ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
 
             <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="type">产品类型</label>
-                <input type="text" id="type" name="type" value="<?= htmlspecialchars($product['type']) ?>" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <select id="type" name="type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">请选择产品类型</option>
+                    <?php for ($i = 0; $i < count(PRODUCT_TYPE_CN); $i++): ?>
+                        <option value="<?= htmlspecialchars(PRODUCT_TYPE_EN[$i] ?? '') ?>" <?= (PRODUCT_TYPE_EN[$i] ?? '') == $product['type'] ? 'selected' : '' ?>><?= htmlspecialchars(PRODUCT_TYPE_CN[$i] ?? '') ?></option>
+                    <?php endfor; ?>
+                </select>
             </div>
         </div>
 

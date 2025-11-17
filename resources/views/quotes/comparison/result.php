@@ -1,9 +1,19 @@
 <div class="bg-white rounded-lg shadow-md p-6">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-800">报价单对比结果</h1>
-        <a href="/quotes/comparison" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-            重新选择
-        </a>
+        <div class="flex space-x-2">
+            <!-- 生成直接访问链接 -->
+            <?php 
+            $quoteIds = array_keys($quotes);
+            $uriParam = implode('_', $quoteIds);
+            ?>
+            <a href="/quotes/comparison/<?= $uriParam ?>" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" target="_blank">
+                直接访问此对比
+            </a>
+            <a href="/quotes/comparison" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                重新选择
+            </a>
+        </div>
     </div>
 
     <!-- 报价单信息对比 -->
@@ -13,31 +23,31 @@
             <table class="min-w-full bg-white border">
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="py-2 px-4 border">信息</th>
+                        <th class="colspan-2 py-2 px-4 border">报价单版本号</th>
                         <?php foreach ($quotes as $quote): ?>
-                        <th class="py-2 px-4 border"><?= htmlspecialchars($quote['version']) ?></th>
+                        <th class="colspan-1 py-2 px-4 border"><?= htmlspecialchars($quote['version']) ?></th>
                         <?php endforeach; ?>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="py-2 px-4 border font-medium">客户</td>
+                        <td class="colspan-2 py-2 px-4 border font-medium">客户</td>
                         <?php foreach ($quotes as $quote): ?>
-                        <td class="py-2 px-4 border">
+                        <td class="colspan-1 py-2 px-4 border">
                             <?= htmlspecialchars($customers[$quote['customer_id']]['short_name'] ?? $customers[$quote['customer_id']]['full_name'] ?? '未知客户') ?>
                         </td>
                         <?php endforeach; ?>
                     </tr>
                     <tr class="bg-gray-50">
-                        <td class="py-2 px-4 border font-medium">分类</td>
+                        <td class="colspan-2 py-2 px-4 border font-medium">分类</td>
                         <?php foreach ($quotes as $quote): ?>
-                        <td class="py-2 px-4 border"><?= htmlspecialchars($quote['category']) ?></td>
+                        <td class="colspan-1 py-2 px-4 border"><?= htmlspecialchars($quote['category']) ?></td>
                         <?php endforeach; ?>
                     </tr>
                     <tr>
-                        <td class="py-2 px-4 border font-medium">状态</td>
+                        <td class="colspan-2 py-2 px-4 border font-medium">状态</td>
                         <?php foreach ($quotes as $quote): ?>
-                        <td class="py-2 px-4 border">
+                        <td class="colspan-1 py-2 px-4 border">
                             <?php if ($quote['is_active']): ?>
                                 <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">生效</span>
                             <?php else: ?>
@@ -47,15 +57,15 @@
                         <?php endforeach; ?>
                     </tr>
                     <tr class="bg-gray-50">
-                        <td class="py-2 px-4 border font-medium">折扣率</td>
+                        <td class="colspan-2 py-2 px-4 border font-medium">折扣率</td>
                         <?php foreach ($quotes as $quote): ?>
-                        <td class="py-2 px-4 border"><?= number_format($quote['discount_rate'], 2) ?>%</td>
+                        <td class="colspan-1 py-2 px-4 border"><?= number_format(is_numeric($quote['discount_rate']) ? $quote['discount_rate'] : 0, 2) ?>%</td>
                         <?php endforeach; ?>
                     </tr>
                     <tr>
-                        <td class="py-2 px-4 border font-medium">返点率</td>
+                        <td class="colspan-2 py-2 px-4 border font-medium">返点率</td>
                         <?php foreach ($quotes as $quote): ?>
-                        <td class="py-2 px-4 border"><?= number_format($quote['rebate_rate'], 2) ?>%</td>
+                        <td class="colspan-1 py-2 px-4 border"><?= number_format(is_numeric($quote['rebate_rate']) ? $quote['rebate_rate'] : 0, 2) ?>%</td>
                         <?php endforeach; ?>
                     </tr>
                 </tbody>
@@ -70,10 +80,10 @@
             <table class="min-w-full bg-white border">
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="py-2 px-4 border">产品</th>
-                        <th class="py-2 px-4 border">单位</th>
+                        <th class="colspan-1 py-2 px-2 border">产品</th>
+                        <th class="colspan-1 py-2 px-2 border">单位</th>
                         <?php foreach ($quotes as $quote): ?>
-                        <th class="py-2 px-4 border"><?= htmlspecialchars($quote['version']) ?></th>
+                        <th class="colspan-1 py-2 px-4 border"><?= htmlspecialchars($quote['version']) ?></th>
                         <?php endforeach; ?>
                     </tr>
                 </thead>
@@ -93,16 +103,16 @@
                         if (!$product) continue;
                     ?>
                     <tr class="<?= isset($rowClass) && $rowClass == 'bg-gray-50' ? ($rowClass = '') : ($rowClass = 'bg-gray-50') ?>">
-                        <td class="py-2 px-4 border"><?= htmlspecialchars($product['name']) ?></td>
-                        <td class="py-2 px-4 border"><?= htmlspecialchars($product['unit']) ?></td>
+                        <td class="colspan-1 py-2 px-2 border"><?= htmlspecialchars($product['name']) ?></td>
+                        <td class="colspan-1 py-2 px-2 border"><?= htmlspecialchars($product['unit']) ?></td>
                         <?php foreach ($quotes as $quote): ?>
-                        <td class="py-2 px-4 border text-center">
+                        <td class="colspan-1 py-2 px-4 border text-center">
                             <?php 
                             $itemPrice = 'N/A';
                             if (isset($items[$quote['id']])) {
                                 foreach ($items[$quote['id']] as $item) {
                                     if ($item['product_id'] == $productId) {
-                                        $itemPrice = '¥' . number_format($item['unit_price'], 2);
+                                        $itemPrice = '¥' . number_format(is_numeric($item['unit_price']) ? $item['unit_price'] : 0, 2);
                                         break;
                                     }
                                 }

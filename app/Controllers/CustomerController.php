@@ -10,17 +10,22 @@ class CustomerController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         $this->customer = new Customer();
     }
 
     public function index()
     {
         $customers = $this->customer->all();
+        // 包含常量文件
+        require_once __DIR__ . '/../../config/const.php';
         return $this->render('customers/index', ['customers' => $customers]);
     }
 
     public function create()
     {
+        // 包含常量文件
+        require_once __DIR__ . '/../../config/const.php';
         return $this->render('customers/create');
     }
 
@@ -46,6 +51,8 @@ class CustomerController extends Controller
     public function edit($id)
     {
         $customer = $this->customer->find($id);
+        // 包含常量文件
+        require_once __DIR__ . '/../../config/const.php';
         return $this->render('customers/edit', ['customer' => $customer]);
     }
 

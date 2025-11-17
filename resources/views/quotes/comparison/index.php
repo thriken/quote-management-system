@@ -9,6 +9,10 @@
     </div>
     <?php endif; ?>
 
+    <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative mb-6" role="alert">
+        <span class="block sm:inline">提示：您可以先在<a href="/quotes" class="underline">报价单管理</a>页面将需要对比的报价单添加到对比列表中，然后再回到此页面进行对比。</span>
+    </div>
+
     <form action="/quotes/comparison" method="POST">
         <div class="mb-6">
             <label class="block text-gray-700 text-sm font-bold mb-2">选择要对比的报价单（至少选择两个）</label>
