@@ -20,9 +20,15 @@ class AuthController extends Controller
         unset($_SESSION['user_id']);
         unset($_SESSION['username']);
         unset($_SESSION['role']);
+        unset($_SESSION['name']);
         session_destroy();
         
-        $this->redirect('/login');
+        // 重定向到登录页面 - 添加额外的HTTP头确保兼容性
+        header("Location: /login");
+        header("Cache-Control: no-cache, no-store, must-revalidate");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        exit;
     }
     
     public function login()
@@ -31,8 +37,11 @@ class AuthController extends Controller
         session_start();
         if (isset($_SESSION['user_id'])) {
             // 如果已登录，重定向到首页
-            $this->redirect('/');
-            return;
+            header("Location: /");
+            header("Cache-Control: no-cache, no-store, must-revalidate");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+            exit;
         }
         
         return $this->render('auth/login');
@@ -56,8 +65,12 @@ class AuthController extends Controller
             $_SESSION['role'] = $user['role'];
             $_SESSION['name'] = $user['name'];
 
-            // 重定向到首页
-            $this->redirect('/');
+            // 重定向到首页 - 添加额外的HTTP头确保兼容性
+            header("Location: /");
+            header("Cache-Control: no-cache, no-store, must-revalidate");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+            exit;
         } else {
             // 登录失败，返回登录页面并显示错误
             return $this->render('auth/login', [

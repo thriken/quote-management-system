@@ -23,15 +23,15 @@
             <table class="min-w-full bg-white border">
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="colspan-2 py-2 px-4 border">报价单版本号</th>
+                        <th colspan="2" class="py-2 px-4 border">报价单版本号</th>
                         <?php foreach ($quotes as $quote): ?>
-                        <th class="colspan-1 py-2 px-4 border"><?= htmlspecialchars($quote['version']) ?></th>
+                        <th class="colspan-1 py-2 px-4 border">版本号：<?= htmlspecialchars($quote['version']) ?></th>
                         <?php endforeach; ?>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="colspan-2 py-2 px-4 border font-medium">客户</td>
+                        <td colspan="2" class="py-2 px-4 border font-medium">客户</td>
                         <?php foreach ($quotes as $quote): ?>
                         <td class="colspan-1 py-2 px-4 border">
                             <?= htmlspecialchars($customers[$quote['customer_id']]['short_name'] ?? $customers[$quote['customer_id']]['full_name'] ?? '未知客户') ?>
@@ -39,13 +39,13 @@
                         <?php endforeach; ?>
                     </tr>
                     <tr class="bg-gray-50">
-                        <td class="colspan-2 py-2 px-4 border font-medium">分类</td>
+                        <td colspan="2" class="py-2 px-4 border font-medium">分类</td>
                         <?php foreach ($quotes as $quote): ?>
                         <td class="colspan-1 py-2 px-4 border"><?= htmlspecialchars($quote['category']) ?></td>
                         <?php endforeach; ?>
                     </tr>
                     <tr>
-                        <td class="colspan-2 py-2 px-4 border font-medium">状态</td>
+                        <td colspan="2" class="py-2 px-4 border font-medium">状态</td>
                         <?php foreach ($quotes as $quote): ?>
                         <td class="colspan-1 py-2 px-4 border">
                             <?php if ($quote['is_active']): ?>
@@ -57,33 +57,24 @@
                         <?php endforeach; ?>
                     </tr>
                     <tr class="bg-gray-50">
-                        <td class="colspan-2 py-2 px-4 border font-medium">折扣率</td>
+                        <td colspan="2" class="py-2 px-4 border font-medium">折扣率</td>
                         <?php foreach ($quotes as $quote): ?>
                         <td class="colspan-1 py-2 px-4 border"><?= number_format(is_numeric($quote['discount_rate']) ? $quote['discount_rate'] : 0, 2) ?>%</td>
                         <?php endforeach; ?>
                     </tr>
                     <tr>
-                        <td class="colspan-2 py-2 px-4 border font-medium">返点率</td>
+                        <td colspan="2" class="py-2 px-4 border font-medium">返点率</td>
                         <?php foreach ($quotes as $quote): ?>
                         <td class="colspan-1 py-2 px-4 border"><?= number_format(is_numeric($quote['rebate_rate']) ? $quote['rebate_rate'] : 0, 2) ?>%</td>
                         <?php endforeach; ?>
                     </tr>
                 </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- 产品项目对比 -->
-    <div>
-        <h2 class="text-xl font-bold mb-4">产品项目对比</h2>
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border">
                 <thead class="bg-gray-200">
                     <tr>
                         <th class="colspan-1 py-2 px-2 border">产品</th>
                         <th class="colspan-1 py-2 px-2 border">单位</th>
                         <?php foreach ($quotes as $quote): ?>
-                        <th class="colspan-1 py-2 px-4 border"><?= htmlspecialchars($quote['version']) ?></th>
+                        <th class="colspan-1 py-2 px-4 border">版本号：<?= htmlspecialchars($quote['version']) ?></th>
                         <?php endforeach; ?>
                     </tr>
                 </thead>
@@ -96,32 +87,34 @@
                             $allProductIds[$item['product_id']] = true;
                         }
                     }
-                    
+                    $rowIndex = 0;
                     // 显示每个产品在各报价单中的价格
                     foreach (array_keys($allProductIds) as $productId):
                         $product = $products[$productId] ?? null;
                         if (!$product) continue;
+                        $rowClass = ($rowIndex % 2 == 0) ? 'bg-gray-50' : 'bg-white';
+                        $rowIndex++;
                     ?>
-                    <tr class="<?= isset($rowClass) && $rowClass == 'bg-gray-50' ? ($rowClass = '') : ($rowClass = 'bg-gray-50') ?>">
-                        <td class="colspan-1 py-2 px-2 border"><?= htmlspecialchars($product['name']) ?></td>
-                        <td class="colspan-1 py-2 px-2 border"><?= htmlspecialchars($product['unit']) ?></td>
-                        <?php foreach ($quotes as $quote): ?>
-                        <td class="colspan-1 py-2 px-4 border text-center">
-                            <?php 
-                            $itemPrice = 'N/A';
-                            if (isset($items[$quote['id']])) {
-                                foreach ($items[$quote['id']] as $item) {
-                                    if ($item['product_id'] == $productId) {
-                                        $itemPrice = '¥' . number_format(is_numeric($item['unit_price']) ? $item['unit_price'] : 0, 2);
-                                        break;
+                        <tr class="<?= isset($rowClass) && $rowClass == 'bg-gray-50' ? ($rowClass = '') : ($rowClass = 'bg-gray-50') ?>">
+                            <td class="colspan-1 py-2 px-2 border"><?= htmlspecialchars($product['name']) ?></td>
+                            <td class="colspan-1 py-2 px-2 border"><?= htmlspecialchars($product['unit']) ?></td>
+                            <?php foreach ($quotes as $quote): ?>
+                            <td class="colspan-1 py-2 px-4 border text-center">
+                                <?php 
+                                $itemPrice = 'N/A';
+                                if (isset($items[$quote['id']])) {
+                                    foreach ($items[$quote['id']] as $item) {
+                                        if ($item['product_id'] == $productId) {
+                                            $itemPrice = '¥' . number_format(is_numeric($item['unit_price']) ? $item['unit_price'] : 0, 2);
+                                            break;
+                                        }
                                     }
                                 }
-                            }
-                            echo $itemPrice;
-                            ?>
-                        </td>
-                        <?php endforeach; ?>
-                    </tr>
+                                echo $itemPrice;
+                                ?>
+                            </td>
+                            <?php endforeach; ?>
+                        </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
