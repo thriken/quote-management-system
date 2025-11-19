@@ -95,22 +95,51 @@
                         $rowClass = ($rowIndex % 2 == 0) ? 'bg-gray-50' : 'bg-white';
                         $rowIndex++;
                     ?>
-                        <tr class="<?= isset($rowClass) && $rowClass == 'bg-gray-50' ? ($rowClass = '') : ($rowClass = 'bg-gray-50') ?>">
+                        <tr class="<?= $rowClass ?>">
                             <td class="colspan-1 py-2 px-2 border"><?= htmlspecialchars($product['name']) ?></td>
                             <td class="colspan-1 py-2 px-2 border"><?= htmlspecialchars($product['unit']) ?></td>
-                            <?php foreach ($quotes as $quote): ?>
+                            <?php 
+                            // 获取第一个报价单的价格作为基准
+                            $firstQuoteId = array_key_first($quotes);
+                            $basePrice = null;
+                            if (isset($items[$firstQuoteId])) {
+                                foreach ($items[$firstQuoteId] as $item) {
+                                    if ($item['product_id'] == $productId && is_numeric($item['unit_price'])) {
+                                        $basePrice = (float)$item['unit_price'];
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            foreach ($quotes as $quote): ?>
                             <td class="colspan-1 py-2 px-4 border text-center">
                                 <?php 
                                 $itemPrice = 'N/A';
+                                $displayPrice = 'N/A';
                                 if (isset($items[$quote['id']])) {
                                     foreach ($items[$quote['id']] as $item) {
                                         if ($item['product_id'] == $productId) {
-                                            $itemPrice = '¥' . number_format(is_numeric($item['unit_price']) ? $item['unit_price'] : 0, 2);
+                                            if (is_numeric($item['unit_price'])) {
+                                                $itemPrice = (float)$item['unit_price'];
+                                                $displayPrice = '¥' . number_format($itemPrice, 2);
+                                                
+                                                // 如果不是第一个报价单且有基准价格，则显示差异
+                                                if ($quote['id'] != $firstQuoteId && $basePrice !== null) {
+                                                    $diff = $itemPrice - $basePrice;
+                                                    if ($diff > 0) {
+                                                        // 价格更高，显示红色和正差值
+                                                        $displayPrice .= ' <span class="text-red-600">[+' . number_format($diff, 2) . '元]</span>';
+                                                    } elseif ($diff < 0) {
+                                                        // 价格更低，显示绿色和负差值
+                                                        $displayPrice .= ' <span class="text-green-600">[' . number_format($diff, 2) . '元]</span>';
+                                                    }
+                                                }
+                                            }
                                             break;
                                         }
                                     }
                                 }
-                                echo $itemPrice;
+                                echo $displayPrice;
                                 ?>
                             </td>
                             <?php endforeach; ?>

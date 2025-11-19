@@ -25,10 +25,26 @@ class QuoteComparisonController extends Controller
 
     public function index()
     {
-        // 获取所有报价单用于选择对比
-        $quotes = $this->quote->query()
-            ->orderBy('created_at', 'DESC')
-            ->get();
+        // 通过GET参数获取对比列表中的报价单ID
+        $compareIds = $this->get('compare_ids', '');
+        
+        if (!empty($compareIds)) {
+            // 解析ID列表并获取对应的报价单
+            $ids = explode(',', $compareIds);
+            $quotes = [];
+            
+            foreach ($ids as $id) {
+                $quote = $this->quote->find($id);
+                if ($quote) {
+                    $quotes[] = $quote;
+                }
+            }
+        } else {
+            // 如果没有指定ID，则显示所有报价单（向后兼容）
+            $quotes = $this->quote->query()
+                ->orderBy('created_at', 'DESC')
+                ->get();
+        }
             
         // 获取客户信息
         $customers = [];

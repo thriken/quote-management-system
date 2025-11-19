@@ -2,7 +2,7 @@
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-800">报价单管理</h1>
         <div class="flex space-x-2">
-            <a href="/quotes/comparison" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            <a href="/quotes/comparison" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" id="compare-link">
                 报价单对比
             </a>
             <a href="/quotes/create" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -76,11 +76,15 @@ function saveCompareList() {
 
 // 更新对比按钮显示
 function updateCompareButton() {
-    const compareButton = document.querySelector('a[href="/quotes/comparison"]');
+    const compareButton = document.getElementById('compare-link');
     if (compareList.length > 0) {
         compareButton.textContent = `报价单对比 (${compareList.length})`;
+        // 更新链接以传递对比列表中的报价单ID
+        const ids = compareList.map(item => item.id).join(',');
+        compareButton.href = `/quotes/comparison?compare_ids=${ids}`;
     } else {
         compareButton.textContent = '报价单对比';
+        compareButton.href = '/quotes/comparison';
     }
 }
 
